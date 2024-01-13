@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import { Product, ENDPOINTS } from "@src/models";
-import axios from "axios";
+import { useGetAllProductsQuery } from "@redux/api";
+import { ErrorComponent, Loading } from "@src/components";
 
 function App() {
-  const [data, setData] = useState<Product[]>();
+  const { data, error, isError, /*isFetching*/ isLoading } =
+    useGetAllProductsQuery();
+  // const [addNewProduct, { isLoading: isNewProductBeingAdded }] =
+  //   useAddNewProductMutation();
 
-  useEffect(() => {
-    axios.get(ENDPOINTS.PRODUCTS).then((res) => setData(res.data));
-  }, []);
+  if (isError) return <ErrorComponent error={error} />;
+  if (isLoading) return <Loading />;
+
   return (
     <>
+      {/* {isNewProductBeingAdded && <>New Data is being added...</>} */}
       {data?.map((product) => (
-        <div>{product.name}</div>
+        <div key={product.id}>{product.name}</div>
       ))}
     </>
   );
