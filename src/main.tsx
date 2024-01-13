@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { PrimeReactProvider } from "primereact/api";
 import App from "./App.tsx";
+import { store } from "@src/redux";
 import "./index.css";
+import { Provider } from "react-redux";
 
 async function enableMocking() {
   if (import.meta.env.MODE !== "development") {
@@ -19,9 +21,11 @@ async function enableMocking() {
 enableMocking().then(() =>
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-      <PrimeReactProvider value={{ pt: { button: {} } }}>
-        <App />
-      </PrimeReactProvider>
+      <Provider store={store}>
+        <PrimeReactProvider value={{ pt: { button: {} } }}>
+          <App />
+        </PrimeReactProvider>
+      </Provider>
     </React.StrictMode>
   )
 );
