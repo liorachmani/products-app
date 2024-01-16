@@ -5,6 +5,8 @@ import App from "./App.tsx";
 import { store } from "@src/redux";
 import "./index.css";
 import { Provider } from "react-redux";
+import "primereact/resources/themes/lara-light-teal/theme.css";
+import { ModalProvider } from "@src/providers";
 
 async function enableMocking() {
   if (import.meta.env.MODE !== "development") {
@@ -22,8 +24,10 @@ enableMocking().then(() =>
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <Provider store={store}>
-        <PrimeReactProvider value={{ pt: { button: {} } }}>
-          <App />
+        <PrimeReactProvider>
+          <ModalProvider>
+            <App />
+          </ModalProvider>
         </PrimeReactProvider>
       </Provider>
     </React.StrictMode>
