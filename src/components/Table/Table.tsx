@@ -1,23 +1,26 @@
 import { AgGridReact } from "ag-grid-react";
+import { GridOptions } from "ag-grid-community";
+
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { Product } from "@src/models";
-// import { useAppSelector } from "@src/redux";
-// import { selectProducts } from "@src/redux/selectors";
+import { GridColumn, Product } from "@src/models";
 import { ReactNode } from "react";
 import "./Table.scss";
-import { Dropdown } from "primereact/dropdown";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Image } from "primereact/image";
 import { useGetAllProductsQuery } from "@src/redux/api";
-import { ErrorComponent, Loading } from "..";
+import { ErrorComponent, Loading } from "@src/components";
+import { useModal } from "@src/providers";
+import { customCellRenderer } from "@src/utils";
 
 type TableRow = Omit<Product, "image"> & { image: JSX.Element } & {
   actions: ReactNode;
 };
-type GridColumn = {
-  field: keyof TableRow;
-  cellRenderer: undefined | (({ value }: { value: ReactNode }) => ReactNode);
-};
+
+enum TABLE_ACTIONS {
+  EDIT = "edit",
+  DELETE = "delete",
+}
 
 function Table() {
   // const { products } = useAppSelector(selectProducts);
@@ -26,31 +29,16 @@ function Table() {
     data: products = [],
     error,
     isError,
-    isFetching /*isLoading*/,
+    // isFetching,
+    isLoading,
   } = useGetAllProductsQuery();
 
+  const { openModal } = useModal();
+
   if (isError) return <ErrorComponent error={error} />;
-  if (isFetching) return <Loading />;
+  if (isLoading) return <Loading />;
 
-  const rowsData: TableRow[] = products.map((product) => ({
-    ...product,
-    image: <Image key={product.id} src={product.image} width="60%" preview />,
-    actions: (
-      <Dropdown
-        key={product.id}
-        id={product.id}
-        style={{ height: "60%", alignItems: "center" }}
-        onChange={(event) => console.log(event)}
-        options={["edit", "delete"]}
-        placeholder="Action"
-        className="rowActions"
-      />
-    ),
-  }));
-
-  const customCellRenderer = ({ value }: { value: ReactNode }) => value;
-
-  const productColumns: GridColumn[] = [
+  const productColumns: GridColumn<TableRow>[] = [
     {
       field: "name",
       cellRenderer: undefined,
@@ -77,40 +65,61 @@ function Table() {
     },
   ];
 
-  const gridOptions = {
+  const gridOptions: GridOptions = {
     defaultColDef: { flex: 1 },
     rowHeight: 100,
     // paginationAutoPageSize: true,
     pagination: true,
     paginationPageSize: 10,
+    paginationPageSizeSelector: [10, 20, 50, 100],
+    domLayout: "autoHeight",
   };
 
-  return (
-    <div
-      id="mainGrid"
-      className="ag-theme-quartz"
-      style={{ /*width: "80vw",*/ height: "75vh", marginTop: "2vh" }}
-    >
-      <AgGridReact
-        rowData={rowsData}
-        columnDefs={productColumns}
-        gridOptions={gridOptions}
+  const rowsData: TableRow[] = products.map((product) => ({
+    ...product,
+    image: <Image key={product.id} src={product.image} width="60%" preview />,
+    actions: (
+      <Dropdown
+        key={product.id}
+        id={product.id}
+        style={{ height: "60%", alignItems: "center" }}
+        onChange={handleRowAction}
+        options={[TABLE_ACTIONS.EDIT, TABLE_ACTIONS.DELETE]}
+        placeholder="Action"
+        className="rowActions"
+      />
+    ),
+  }));
 
-        // gridOptions={{
-        //   defaultColDef: { flex: 1 },
-        //   rowHeight: 100,
-        //   pagination: true,
-        //   paginationPageSize: 10,
-        //   // rowStyle: {{}}
-        //   // rowClass: "rowClass",
-        //   // autoSizeStrategy: { type: "fitCellContents" },
-        //   // rowSelection: "single",
-        //   // onSelectionChanged(event) {
-        //   //   console.log("ROW SELECTED", event.api.getSelectedRows());
-        //   // },
-        // }}
-      ></AgGridReact>
-    </div>
+  function handleRowAction(event: DropdownChangeEvent) {
+    const {
+      target: { id, value },
+    } = event;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { actions, ...productData } = rowsData.find(
+      (row) => row.id === id
+    ) as TableRow;
+
+    if (value === TABLE_ACTIONS.DELETE) {
+      openModal("delete", { ...productData });
+    }
+  }
+
+  return (
+    <>
+      <div
+        id="mainGrid"
+        className="ag-theme-quartz"
+        style={{ height: "100%", marginTop: "2vh" }}
+      >
+        <AgGridReact
+          rowData={rowsData}
+          columnDefs={productColumns}
+          gridOptions={gridOptions}
+        />
+      </div>
+    </>
   );
 }
 
