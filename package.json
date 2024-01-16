@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@giladappsforce/react-modal-provider": "^1.0.8",
     "@reduxjs/toolkit": "^2.0.1",
     "ag-grid-react": "^31.0.1",
     "axios": "^1.6.5",
