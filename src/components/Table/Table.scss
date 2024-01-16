@@ -1,23 +1,21 @@
-#mainGrid {
-  .rowActions {
-    display: none;
-  }
+.rowActions {
+  display: none;
+}
 
-  /* ag-grid adds ag-row-hover class on row hover */
-  .ag-row-hover .rowActions {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    // align-items: center;
-  }
+/* ag-grid adds ag-row-hover class on row hover */
+.ag-row-hover .rowActions {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  // align-items: center;
+}
 
-  .ag-header-cell-label {
-    justify-content: center;
-  }
+.ag-header-cell-label {
+  justify-content: center;
+}
 
-  .ag-row .ag-cell {
-    display: flex;
-    justify-content: center; /* align horizontal */
-    align-items: center;
-  }
+.ag-row .ag-cell {
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center;
 }

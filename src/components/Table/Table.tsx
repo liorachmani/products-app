@@ -1,10 +1,9 @@
 import { AgGridReact } from "ag-grid-react";
-import { GridOptions } from "ag-grid-community";
-
+import { GridOptions, ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { GridColumn, Product } from "@src/models";
-import { ReactNode } from "react";
+import { Product } from "@src/models";
+import { MutableRefObject, ReactNode, useRef } from "react";
 import "./Table.scss";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Image } from "primereact/image";
@@ -12,6 +11,8 @@ import { useGetAllProductsQuery } from "@src/redux/api";
 import { ErrorComponent, Loading } from "@src/components";
 import { useModal } from "@src/providers";
 import { customCellRenderer } from "@src/utils";
+import { Toast } from "primereact/toast";
+import { assetsPath } from "@src/constants";
 
 type TableRow = Omit<Product, "image"> & { image: JSX.Element } & {
   actions: ReactNode;
@@ -35,17 +36,17 @@ function Table() {
 
   const { openModal } = useModal();
 
+  const toast = useRef() as MutableRefObject<Toast>;
+
   if (isError) return <ErrorComponent error={error} />;
   if (isLoading) return <Loading />;
 
-  const productColumns: GridColumn<TableRow>[] = [
+  const productColumns: ColDef<TableRow>[] = [
     {
       field: "name",
-      cellRenderer: undefined,
     },
     {
       field: "brand",
-      cellRenderer: undefined,
     },
     {
       field: "image",
@@ -53,11 +54,9 @@ function Table() {
     },
     {
       field: "price",
-      cellRenderer: undefined,
     },
     {
       field: "id",
-      cellRenderer: undefined,
     },
     {
       field: "actions",
@@ -68,7 +67,6 @@ function Table() {
   const gridOptions: GridOptions = {
     defaultColDef: { flex: 1 },
     rowHeight: 100,
-    // paginationAutoPageSize: true,
     pagination: true,
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
@@ -77,7 +75,14 @@ function Table() {
 
   const rowsData: TableRow[] = products.map((product) => ({
     ...product,
-    image: <Image key={product.id} src={product.image} width="60%" preview />,
+    image: (
+      <Image
+        key={product.id}
+        src={`${assetsPath}${product.image}.png`}
+        width="60%"
+        preview
+      />
+    ),
     actions: (
       <Dropdown
         key={product.id}
@@ -96,20 +101,15 @@ function Table() {
       target: { id, value },
     } = event;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { actions, ...productData } = rowsData.find(
-      (row) => row.id === id
-    ) as TableRow;
+    const currProductData = products.find((row) => row.id === id);
 
-    if (value === TABLE_ACTIONS.DELETE) {
-      openModal("delete", { ...productData });
-    }
+    openModal(value, { ...currProductData, toast });
   }
 
   return (
     <>
+      <Toast ref={toast} />
       <div
-        id="mainGrid"
         className="ag-theme-quartz"
         style={{ height: "100%", marginTop: "2vh" }}
       >
