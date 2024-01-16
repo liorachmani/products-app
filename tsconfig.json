@@ -26,7 +26,8 @@
       "@constants/*": ["src/constants/*"],
       "@redux/*": ["src/redux/*"],
       "@mocks/*": ["src/mocks/*"],
-      "@models/*": ["src/models/*"]
+      "@models/*": ["src/models/*"],
+      "@assets/*": ["src/assets/*"]
     }
   },
   "include": ["src"],
