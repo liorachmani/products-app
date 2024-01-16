@@ -1,5 +1,5 @@
-import { GridColumn, MSWResponseBody, Product, TableRow } from "@src/models";
-import { GridOptions } from "ag-grid-community";
+import { MSWResponseBody, TableRow } from "@src/models";
+import { GridOptions, ColDef } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
 import { customCellRenderer } from "@src/utils";
@@ -8,15 +8,19 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Toast } from "primereact/toast";
-import { MutableRefObject, useRef } from "react";
+import { MutableRefObject } from "react";
+import { Image } from "primereact/image";
+import { assetsPath } from "@src/constants";
 
-type DeleteModalProps = Omit<TableRow, "actions">;
+type DeleteModalProps = Omit<TableRow, "actions"> & {
+  toast: MutableRefObject<Toast>;
+};
 
 function DeleteModal(props: DeleteModalProps) {
   const [deleteProduct, { isLoading: isProductBeingDeleted }] =
     useDeleteProductMutation();
   const { closeModal } = useModal();
-  const toast = useRef() as MutableRefObject<Toast>;
+  const { toast } = props;
 
   const headerElement = <h2>Are you sure you want to delete?</h2>;
 
@@ -49,15 +53,18 @@ function DeleteModal(props: DeleteModalProps) {
   const footerContent = (
     <div>
       <Button
-        label="Ok"
-        icon="pi pi-check"
+        label="Confirm"
+        disabled={isProductBeingDeleted}
+        text
+        raised
+        severity="info"
         onClick={handleRowDelete}
         autoFocus
       />
     </div>
   );
 
-  const columnDefs: GridColumn<Product>[] = [
+  const columnDefs: ColDef<TableRow>[] = [
     {
       field: "name",
       cellRenderer: undefined,
@@ -86,9 +93,15 @@ function DeleteModal(props: DeleteModalProps) {
     domLayout: "autoHeight",
   };
 
+  const rows = [
+    {
+      ...props,
+      image: <Image src={`${assetsPath}${props.image}.png`} width="60%" />,
+    },
+  ];
+
   return (
     <>
-      <Toast ref={toast} />
       <div>
         <Dialog
           visible={true}
@@ -102,7 +115,7 @@ function DeleteModal(props: DeleteModalProps) {
           {!isProductBeingDeleted && (
             <div className="ag-theme-quartz" style={{ height: "100%" }}>
               <AgGridReact
-                rowData={[{ ...props }]}
+                rowData={rows}
                 columnDefs={columnDefs}
                 gridOptions={gridOptions}
               />
