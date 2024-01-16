@@ -1,4 +1,9 @@
-import { OPERATIONS, PRODUCS_PREFIX, Product } from "@src/models";
+import {
+  MSWResponseBody,
+  OPERATIONS,
+  PRODUCS_PREFIX,
+  Product,
+} from "@src/models";
 import { baseApi } from "@redux/api";
 import { RTK_TAGS } from "@src/models";
 
@@ -8,7 +13,15 @@ export const productsApi = baseApi.injectEndpoints({
       query: () => PRODUCS_PREFIX,
       providesTags: [RTK_TAGS.PRODUCT_TAG],
     }),
-    addNewProduct: builder.mutation<boolean, Product>({
+    deleteProduct: builder.mutation<MSWResponseBody, string>({
+      query: (idToDelete) => ({
+        url: `${PRODUCS_PREFIX}${OPERATIONS.DELETE}`,
+        method: "DELETE",
+        body: { id: idToDelete },
+      }),
+      invalidatesTags: [RTK_TAGS.PRODUCT_TAG],
+    }),
+    addNewProduct: builder.mutation<MSWResponseBody, Product>({
       query: (newProduct) => ({
         url: `${PRODUCS_PREFIX}${OPERATIONS.ADD}`,
         method: "POST",
@@ -19,7 +32,11 @@ export const productsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllProductsQuery, useAddNewProductMutation } = productsApi;
+export const {
+  useGetAllProductsQuery,
+  useDeleteProductMutation,
+  useAddNewProductMutation,
+} = productsApi;
 
 // import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // import { Product } from "@src/models";
