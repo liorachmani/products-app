@@ -27,7 +27,8 @@
       "@redux/*": ["src/redux/*"],
       "@mocks/*": ["src/mocks/*"],
       "@models/*": ["src/models/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@providers/*": ["src/providers/*"]
     }
   },
   "include": ["src"],
