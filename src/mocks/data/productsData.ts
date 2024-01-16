@@ -1,11 +1,16 @@
 import { Product } from "@models/Product";
+// import shirt from "@src/assets/shirt.png";
+// import shoes from "@src/assets/shoes.png";
+// import pants from "@src/assets/pants.png";
+// import socks from "@src/assets/socks.png";
+// import ball from "@src/assets/ball.png";
 
 export const productsData: Product[] = [
   {
     name: "Running Shoes",
     id: "1",
     price: 89.99,
-    image: "shoes",
+    image: "shirt",
     brand: "Nike",
   },
   {
