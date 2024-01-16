@@ -42,4 +42,25 @@ export const handlers = [
       });
     }
   ),
+  http.put<PathParams, Product & { oldId: string }, MSWResponseBody>(
+    `${ENDPOINTS.PRODUCTS}${OPERATIONS.UPDATE}`,
+    async ({ request }) => {
+      await delay(2000);
+
+      const { oldId, ...updatedFields } = await request.json();
+      const productToEditIndex = productsData.findIndex(
+        (product) => product.id === oldId
+      );
+
+      productsData[productToEditIndex] = {
+        // ...productsData[productToEditIndex],
+        ...updatedFields,
+      };
+
+      return HttpResponse.json({
+        success: true,
+        text: "Product updated",
+      });
+    }
+  ),
 ];

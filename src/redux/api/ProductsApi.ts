@@ -29,6 +29,16 @@ export const productsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [RTK_TAGS.PRODUCT_TAG],
     }),
+    editProduct: builder.mutation<MSWResponseBody, Product & { oldId: string }>(
+      {
+        query: (editedProduct) => ({
+          url: `${PRODUCS_PREFIX}${OPERATIONS.UPDATE}`,
+          method: "PUT",
+          body: editedProduct,
+        }),
+        invalidatesTags: [RTK_TAGS.PRODUCT_TAG],
+      }
+    ),
   }),
 });
 
@@ -36,19 +46,5 @@ export const {
   useGetAllProductsQuery,
   useDeleteProductMutation,
   useAddNewProductMutation,
+  useEditProductMutation,
 } = productsApi;
-
-// import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-// import { Product } from "@src/models";
-
-// export const productsApi = createApi({
-//   reducerPath: "productsApi",
-//   baseQuery: fetchBaseQuery({ baseUrl: "/api/products" }),
-//   endpoints: (builder) => ({
-//     getAllProducts: builder.query<Product[], void>({
-//       query: () => "products",
-//     }),
-//   }),
-// });
-
-// export const { useGetAllProductsQuery } = productsApi;
