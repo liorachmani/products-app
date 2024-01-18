@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledHeader = styled.h1`
@@ -9,8 +10,29 @@ const StyledHeader = styled.h1`
   background-clip: text;
 `;
 
+const StyledAddProduct = styled.button`
+  text-align: center;
+  margin: auto;
+  background-color: #d76767;
+  color: black;
+`;
+
+const StyledHeaderContainer = styled.div`
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  grid-column-gap: 2rem;
+  align-items: center;
+`;
+
 function Header() {
-  return <StyledHeader>Lior's Products App</StyledHeader>;
+  return (
+    <StyledHeaderContainer>
+      <StyledHeader>Lior's Products App</StyledHeader>
+      <Link to={`/add`}>
+        <StyledAddProduct>Add</StyledAddProduct>
+      </Link>
+    </StyledHeaderContainer>
+  );
 }
 
 export default Header;
