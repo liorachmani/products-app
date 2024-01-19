@@ -7,44 +7,30 @@ import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Toast } from "primereact/toast";
-import { MutableRefObject } from "react";
 import { Image } from "primereact/image";
 import { assetsPath } from "@src/constants";
+import { toast } from "react-toastify";
 
-type DeleteModalProps = Omit<TableRow, "actions"> & {
-  toast: MutableRefObject<Toast>;
-};
+type DeleteModalProps = Omit<TableRow, "actions">;
 
 function DeleteModal(props: DeleteModalProps) {
   const [deleteProduct, { isLoading: isProductBeingDeleted }] =
     useDeleteProductMutation();
   const { closeModal } = useModal();
-  const { toast } = props;
 
   const headerElement = <h2>Are you sure you want to delete?</h2>;
 
   const handleRowDelete = async () => {
     try {
       const payload: MSWResponseBody = await deleteProduct(props.id).unwrap();
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: payload.text,
-        life: 3000,
-      });
+      toast.success(payload.text);
     } catch (error) {
       let errMsg = "An error occured ";
       if (error instanceof Error) {
         errMsg += error.message;
       }
 
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: errMsg,
-        life: 3000,
-      });
+      toast.error(errMsg);
     } finally {
       closeModal();
     }
