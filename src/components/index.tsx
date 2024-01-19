@@ -4,3 +4,4 @@ export * from "./Table";
 export * from "./Header";
 export * from "./FormikFields";
 export * from "./AddProductFrom";
+export * from "./SearchBar";

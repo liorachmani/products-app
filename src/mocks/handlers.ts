@@ -1,13 +1,36 @@
 import { DefaultBodyType, delay, http, HttpResponse, PathParams } from "msw";
-import { ENDPOINTS, OPERATIONS, Product, MSWResponseBody } from "@src/models";
+import {
+  ENDPOINTS,
+  OPERATIONS,
+  Product,
+  MSWResponseBody,
+  GetProductsParams,
+} from "@src/models";
 import { productsData } from "@mocks/data";
 
 export const handlers = [
-  http.get<PathParams, DefaultBodyType, Product[]>(
+  http.get<Required<GetProductsParams>, DefaultBodyType, Product[]>(
     ENDPOINTS.PRODUCTS,
-    async () => {
+    async ({ request }) => {
       await delay(1000);
-      return HttpResponse.json(productsData);
+
+      const url = new URL(request.url);
+
+      const searchCategory = url.searchParams.get("category") as keyof Product;
+      const filterText = url.searchParams.get("filterText") as string;
+
+      if (!filterText) {
+        return HttpResponse.json(productsData);
+      }
+
+      const filteredProductsData = productsData.filter((product) =>
+        product[searchCategory]
+          .toString()
+          .toLowerCase()
+          .includes(filterText.toLowerCase())
+      );
+
+      return HttpResponse.json(filteredProductsData);
     }
   ),
   http.post<PathParams, Product, MSWResponseBody>(

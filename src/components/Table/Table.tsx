@@ -12,6 +12,7 @@ import { ErrorComponent, Loading } from "@src/components";
 import { useModal } from "@src/providers";
 import { customCellRenderer } from "@src/utils";
 import { assetsPath } from "@src/constants";
+import { RootState, useAppSelector } from "@src/redux";
 
 type TableRow = Omit<Product, "image"> & { image: JSX.Element } & {
   actions: ReactNode;
@@ -23,16 +24,21 @@ enum TABLE_ACTIONS {
 }
 
 function Table() {
+  const { category, filterText } = useAppSelector(
+    (store: RootState) => store.search
+  );
+
   const {
     data: products = [],
     error,
     isError,
     isFetching,
-  } = useGetAllProductsQuery();
+  } = useGetAllProductsQuery({ category, filterText });
 
   const { openModal } = useModal();
 
   if (isError) return <ErrorComponent error={error} />;
+  if (isFetching && products.length === 0) return <Loading />;
 
   const productColumns: ColDef<TableRow>[] = [
     {
@@ -64,7 +70,7 @@ function Table() {
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
     domLayout: "autoHeight",
-    noRowsOverlayComponent: Loading,
+    // noRowsOverlayComponent: isFetching ? Loading : null,
   };
 
   const rowsData: TableRow[] = products.map((product) => ({

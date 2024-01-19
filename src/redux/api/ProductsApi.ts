@@ -1,4 +1,5 @@
 import {
+  GetProductsParams,
   MSWResponseBody,
   OPERATIONS,
   PRODUCS_PREFIX,
@@ -9,8 +10,14 @@ import { RTK_TAGS } from "@src/models";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllProducts: builder.query<Product[], void>({
-      query: () => PRODUCS_PREFIX,
+    getAllProducts: builder.query<Product[], GetProductsParams>({
+      query: (filterParams) => {
+        const { category = "", filterText = "" } = filterParams;
+        return {
+          url: PRODUCS_PREFIX,
+          params: { category, filterText },
+        };
+      },
       providesTags: [RTK_TAGS.PRODUCT_TAG],
     }),
     deleteProduct: builder.mutation<MSWResponseBody, string>({
