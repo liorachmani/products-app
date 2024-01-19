@@ -7,6 +7,20 @@ import "./index.css";
 import { Provider } from "react-redux";
 import "primereact/resources/themes/lara-light-teal/theme.css";
 import { ModalProvider } from "@src/providers";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AddProduct, ErrorPage } from "@src/routes";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/add",
+    element: <AddProduct />,
+  },
+]);
 
 async function enableMocking() {
   if (import.meta.env.MODE !== "development") {
@@ -26,7 +40,7 @@ enableMocking().then(() =>
       <Provider store={store}>
         <PrimeReactProvider>
           <ModalProvider>
-            <App />
+            <RouterProvider router={router} />
           </ModalProvider>
         </PrimeReactProvider>
       </Provider>

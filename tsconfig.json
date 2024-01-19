@@ -28,7 +28,8 @@
       "@mocks/*": ["src/mocks/*"],
       "@models/*": ["src/models/*"],
       "@assets/*": ["src/assets/*"],
-      "@providers/*": ["src/providers/*"]
+      "@providers/*": ["src/providers/*"],
+      "@routes/*": ["src/routes/*"]
     }
   },
   "include": ["src"],

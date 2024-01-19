@@ -3,7 +3,7 @@ import { GridOptions, ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { Product } from "@src/models";
-import { MutableRefObject, ReactNode, useRef } from "react";
+import { ReactNode } from "react";
 import "./Table.scss";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Image } from "primereact/image";
@@ -11,7 +11,6 @@ import { useGetAllProductsQuery } from "@src/redux/api";
 import { ErrorComponent, Loading } from "@src/components";
 import { useModal } from "@src/providers";
 import { customCellRenderer } from "@src/utils";
-import { Toast } from "primereact/toast";
 import { assetsPath } from "@src/constants";
 
 type TableRow = Omit<Product, "image"> & { image: JSX.Element } & {
@@ -24,22 +23,16 @@ enum TABLE_ACTIONS {
 }
 
 function Table() {
-  // const { products } = useAppSelector(selectProducts);
-
   const {
     data: products = [],
     error,
     isError,
-    // isFetching,
-    isLoading,
+    isFetching,
   } = useGetAllProductsQuery();
 
   const { openModal } = useModal();
 
-  const toast = useRef() as MutableRefObject<Toast>;
-
   if (isError) return <ErrorComponent error={error} />;
-  if (isLoading) return <Loading />;
 
   const productColumns: ColDef<TableRow>[] = [
     {
@@ -71,6 +64,7 @@ function Table() {
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
     domLayout: "autoHeight",
+    noRowsOverlayComponent: Loading,
   };
 
   const rowsData: TableRow[] = products.map((product) => ({
@@ -103,15 +97,18 @@ function Table() {
 
     const currProductData = products.find((row) => row.id === id);
 
-    openModal(value, { ...currProductData, toast });
+    openModal(value, { ...currProductData });
   }
 
   return (
     <>
-      <Toast ref={toast} />
       <div
         className="ag-theme-quartz"
-        style={{ height: "100%", marginTop: "2vh" }}
+        style={{
+          height: "100%",
+          marginTop: "2vh",
+          opacity: isFetching ? "0.5" : "1",
+        }}
       >
         <AgGridReact
           rowData={rowsData}
