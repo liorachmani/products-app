@@ -17,7 +17,7 @@ export const handlers = [
 
       const newProduct = await request.json();
       // eslint-disable-next-line
-      productsData.push(newProduct);
+      productsData.unshift(newProduct);
       return HttpResponse.json({
         success: true,
         text: "Product added",
