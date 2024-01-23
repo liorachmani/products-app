@@ -75,7 +75,6 @@ export const handlers = [
       );
 
       productsData[productToEditIndex] = {
-        // ...productsData[productToEditIndex],
         ...updatedFields,
       };
 
