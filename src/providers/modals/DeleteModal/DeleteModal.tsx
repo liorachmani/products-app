@@ -2,7 +2,7 @@ import { MSWResponseBody, TableRow } from "@src/models";
 import { GridOptions, ColDef } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
-import { customCellRenderer } from "@src/utils";
+import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -25,11 +25,7 @@ function DeleteModal(props: DeleteModalProps) {
       const payload: MSWResponseBody = await deleteProduct(props.id).unwrap();
       toast.success(payload.text);
     } catch (error) {
-      let errMsg = "An error occured ";
-      if (error instanceof Error) {
-        errMsg += error.message;
-      }
-
+      const errMsg = extractErrorMessage(error);
       toast.error(errMsg);
     } finally {
       closeModal();

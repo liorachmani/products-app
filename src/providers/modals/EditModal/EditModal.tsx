@@ -9,14 +9,13 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useModal } from "@src/providers";
 import { useEditProductMutation } from "@src/redux/api";
-import { customCellRenderer } from "@src/utils";
+import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { GridOptions, ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useState } from "react";
-import { ValidationError } from "yup";
 import { toast } from "react-toastify";
 
 type EditModalProps = Product & {
@@ -55,9 +54,7 @@ function EditModal(props: EditModalProps) {
         setIsValidRow(true);
         setEditedRowValues({ ...parsedNewProduct });
       } catch (error) {
-        let errMsg = "An error occured ";
-        if (error instanceof ValidationError) errMsg += error.message;
-
+        const errMsg = extractErrorMessage(error);
         toast.error(errMsg);
         setIsValidRow(false);
       }
@@ -72,11 +69,7 @@ function EditModal(props: EditModalProps) {
       }).unwrap();
       toast.success(payload.text);
     } catch (error) {
-      let errMsg = "An error occured ";
-      if (error instanceof Error) {
-        errMsg += error.message;
-      }
-
+      const errMsg = extractErrorMessage(error);
       toast.error(errMsg);
     } finally {
       closeModal();

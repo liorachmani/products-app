@@ -11,13 +11,13 @@ import { useAddNewProductMutation } from "@src/redux/api";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Button } from "primereact/button";
 import { toast } from "react-toastify";
+import { extractErrorMessage } from "@src/utils";
 
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   width: 50vw;
   margin: auto;
-  //   align-items: flex-start;
   text-align: left;
 `;
 
@@ -37,10 +37,7 @@ function AddProductForm() {
       const payload: MSWResponseBody = await addProduct(values).unwrap();
       toast.success(payload.text);
     } catch (error) {
-      let errMsg = "An error occured ";
-      if (error instanceof Error) {
-        errMsg += error.message;
-      }
+      const errMsg = extractErrorMessage(error);
       toast.error(errMsg);
     } finally {
       setSubmitting(false);
