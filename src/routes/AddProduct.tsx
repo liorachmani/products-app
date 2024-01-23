@@ -1,16 +1,12 @@
-import { AddProductForm } from "@src/components";
+import { AddProductForm, Header } from "@src/components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styled from "styled-components";
-
-const AddNewProductHeader = styled.h1`
-  line-height: 0;
-`;
 
 function AddProduct() {
   return (
     <>
-      <AddNewProductHeader>Add new product:</AddNewProductHeader>
+      <Header title="Add new product" route="/" buttonText="Go back" />
+
       <ToastContainer />
       <AddProductForm />
     </>

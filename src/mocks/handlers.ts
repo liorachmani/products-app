@@ -39,7 +39,6 @@ export const handlers = [
       await delay(2000);
 
       const newProduct = await request.json();
-      // eslint-disable-next-line
       productsData.unshift(newProduct);
       return HttpResponse.json({
         success: true,

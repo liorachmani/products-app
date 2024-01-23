@@ -5,7 +5,7 @@ import { Header, Table, SearchBar } from "@src/components";
 function App() {
   return (
     <>
-      <Header />
+      <Header title="Lior's Products App" route="/add" buttonText="Add" />
 
       <SearchBar />
 

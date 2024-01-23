@@ -9,15 +9,15 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useModal } from "@src/providers";
 import { useEditProductMutation } from "@src/redux/api";
-import { customCellRenderer } from "@src/utils";
+import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { GridOptions, ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { useState } from "react";
-import { ValidationError } from "yup";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import { isEqual } from "lodash";
+import { Loading } from "@src/components";
 
 type EditModalProps = Product & {
   open: boolean;
@@ -40,6 +40,12 @@ function EditModal(props: EditModalProps) {
     ...canBeEdited,
   });
 
+  const isRowChanged = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { open, onClose, ...toBeCompared } = props;
+    return !isEqual(toBeCompared, editedRowValues);
+  }, [editedRowValues, props]);
+
   const gridOptions: GridOptions = {
     defaultColDef: { flex: 1 },
     rowHeight: 100,
@@ -55,9 +61,7 @@ function EditModal(props: EditModalProps) {
         setIsValidRow(true);
         setEditedRowValues({ ...parsedNewProduct });
       } catch (error) {
-        let errMsg = "An error occured ";
-        if (error instanceof ValidationError) errMsg += error.message;
-
+        const errMsg = extractErrorMessage(error);
         toast.error(errMsg);
         setIsValidRow(false);
       }
@@ -72,11 +76,7 @@ function EditModal(props: EditModalProps) {
       }).unwrap();
       toast.success(payload.text);
     } catch (error) {
-      let errMsg = "An error occured ";
-      if (error instanceof Error) {
-        errMsg += error.message;
-      }
-
+      const errMsg = extractErrorMessage(error);
       toast.error(errMsg);
     } finally {
       closeModal();
@@ -91,7 +91,7 @@ function EditModal(props: EditModalProps) {
         label="Save"
         severity="success"
         onClick={handleEditRowSave}
-        disabled={isProductBeingUpdated || !isValidRow}
+        disabled={!isRowChanged() || isProductBeingUpdated || !isValidRow}
         text
         raised
       />
@@ -152,9 +152,9 @@ function EditModal(props: EditModalProps) {
           style={{ width: "50rem" }}
           onHide={closeModal}
         >
-          {isProductBeingUpdated && <ProgressSpinner />}
+          {isProductBeingUpdated && <Loading />}
           {!isProductBeingUpdated && (
-            <div className="ag-theme-quartz" style={{ height: "100%" }}>
+            <div className="ag-theme-quartz">
               <AgGridReact
                 rowData={[{ ...editedRowValues }]}
                 columnDefs={columnDefs}

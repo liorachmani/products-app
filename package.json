@@ -12,10 +12,12 @@
   "dependencies": {
     "@giladappsforce/react-modal-provider": "^1.0.8",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/lodash": "^4.14.202",
     "ag-grid-react": "^31.0.1",
     "axios": "^1.6.5",
     "formik": "^2.4.5",
     "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "match-sorter": "^6.3.3",
     "primereact": "^10.3.1",
     "react": "^18.2.0",

@@ -2,5 +2,5 @@ import { Product } from ".";
 
 export type Search = {
   filterText: string;
-  category: keyof Product;
+  category: keyof Product | "";
 };

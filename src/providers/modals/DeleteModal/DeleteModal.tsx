@@ -2,14 +2,14 @@ import { MSWResponseBody, TableRow } from "@src/models";
 import { GridOptions, ColDef } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
-import { customCellRenderer } from "@src/utils";
+import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { Image } from "primereact/image";
 import { assetsPath } from "@src/constants";
 import { toast } from "react-toastify";
+import { Loading } from "@src/components";
 
 type DeleteModalProps = Omit<TableRow, "actions">;
 
@@ -25,11 +25,7 @@ function DeleteModal(props: DeleteModalProps) {
       const payload: MSWResponseBody = await deleteProduct(props.id).unwrap();
       toast.success(payload.text);
     } catch (error) {
-      let errMsg = "An error occured ";
-      if (error instanceof Error) {
-        errMsg += error.message;
-      }
-
+      const errMsg = extractErrorMessage(error);
       toast.error(errMsg);
     } finally {
       closeModal();
@@ -97,9 +93,9 @@ function DeleteModal(props: DeleteModalProps) {
           style={{ width: "50rem" }}
           onHide={closeModal}
         >
-          {isProductBeingDeleted && <ProgressSpinner />}
+          {isProductBeingDeleted && <Loading />}
           {!isProductBeingDeleted && (
-            <div className="ag-theme-quartz" style={{ height: "100%" }}>
+            <div className="ag-theme-quartz">
               <AgGridReact
                 rowData={rows}
                 columnDefs={columnDefs}
