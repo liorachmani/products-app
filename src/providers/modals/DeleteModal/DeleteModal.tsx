@@ -6,10 +6,10 @@ import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { Image } from "primereact/image";
 import { assetsPath } from "@src/constants";
 import { toast } from "react-toastify";
+import { Loading } from "@src/components";
 
 type DeleteModalProps = Omit<TableRow, "actions">;
 
@@ -93,9 +93,9 @@ function DeleteModal(props: DeleteModalProps) {
           style={{ width: "50rem" }}
           onHide={closeModal}
         >
-          {isProductBeingDeleted && <ProgressSpinner />}
+          {isProductBeingDeleted && <Loading />}
           {!isProductBeingDeleted && (
-            <div className="ag-theme-quartz" style={{ height: "100%" }}>
+            <div className="ag-theme-quartz">
               <AgGridReact
                 rowData={rows}
                 columnDefs={columnDefs}

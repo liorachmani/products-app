@@ -6,8 +6,6 @@
 .ag-row-hover .rowActions {
   display: flex;
   width: 100%;
-  height: 100%;
-  // align-items: center;
 }
 
 .ag-header-cell-label {
@@ -16,6 +14,11 @@
 
 .ag-row .ag-cell {
   display: flex;
-  justify-content: center; /* align horizontal */
+  justify-content: center;
+  align-items: center;
+}
+
+.tableActionsDropdown {
+  height: 60%;
   align-items: center;
 }

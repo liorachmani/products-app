@@ -1,6 +1,5 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
-import { memo } from "react";
 
 type ErrorComponentProps = { error: FetchBaseQueryError | SerializedError };
 
@@ -23,5 +22,4 @@ function ErrorComponent(props: ErrorComponentProps) {
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default memo(ErrorComponent);
+export default ErrorComponent;

@@ -1,6 +1,6 @@
 import { ValidationError } from "yup";
 
-type ErrorTypes = Error | ValidationError | unknown;
+type ErrorTypes = unknown | Error | ValidationError;
 
 /**
  * This function receives an error object and extract the relevant error message

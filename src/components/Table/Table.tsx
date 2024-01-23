@@ -13,6 +13,7 @@ import { useModal } from "@src/providers";
 import { customCellRenderer } from "@src/utils";
 import { assetsPath } from "@src/constants";
 import { RootState, useAppSelector } from "@src/redux";
+import styled from "styled-components";
 
 type TableRow = Omit<Product, "image"> & { image: JSX.Element } & {
   actions: ReactNode;
@@ -70,7 +71,6 @@ function Table() {
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
     domLayout: "autoHeight",
-    // noRowsOverlayComponent: isFetching ? Loading : null,
   };
 
   const rowsData: TableRow[] = products.map((product) => ({
@@ -87,11 +87,12 @@ function Table() {
       <Dropdown
         key={product.id}
         id={product.id}
-        style={{ height: "60%", alignItems: "center" }}
         onChange={handleRowAction}
-        options={[TABLE_ACTIONS.EDIT, TABLE_ACTIONS.DELETE]}
+        options={
+          [TABLE_ACTIONS.EDIT, TABLE_ACTIONS.DELETE] as Array<TABLE_ACTIONS>
+        }
         placeholder="Action"
-        className="rowActions"
+        className={["rowActions", "tableActionsDropdown"].join(" ")}
       />
     ),
   }));
@@ -106,22 +107,22 @@ function Table() {
     openModal(value, { ...currProductData });
   }
 
+  const TableWrapper = styled.div.attrs((props) => ({
+    className: props.className,
+  }))`
+    margin-top: 2vh;
+    opacity: ${isFetching ? "0.5" : "1"};
+  `;
+
   return (
     <>
-      <div
-        className="ag-theme-quartz"
-        style={{
-          height: "100%",
-          marginTop: "2vh",
-          opacity: isFetching ? "0.5" : "1",
-        }}
-      >
+      <TableWrapper className="ag-theme-quartz">
         <AgGridReact
           rowData={rowsData}
           columnDefs={productColumns}
           gridOptions={gridOptions}
         />
-      </div>
+      </TableWrapper>
     </>
   );
 }

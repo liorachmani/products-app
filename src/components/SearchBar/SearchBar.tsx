@@ -24,7 +24,7 @@ function SearchBar() {
 
   const dispatch = useAppDispatch();
 
-  // Debounce function to delay dispatching the action
+  // Debounce function to delay dispatching the action for each character typed
   const debounceDispatch = useCallback(
     debounce((newFilterValue: string) => {
       dispatch(editFilterText(newFilterValue));
