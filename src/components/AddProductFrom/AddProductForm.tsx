@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { DropdownField, TextInputField } from "@src/components";
+import { DropdownField, Loading, TextInputField } from "@src/components";
 import {
   MSWResponseBody,
   Product,
@@ -10,8 +10,6 @@ import {
 import { useAddNewProductMutation } from "@src/redux/api";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Button } from "primereact/button";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const StyledForm = styled(Form)`
@@ -31,8 +29,6 @@ function AddProductForm() {
   const [addProduct, { isLoading: isProductBeingAdded }] =
     useAddNewProductMutation();
 
-  const navigate = useNavigate();
-
   const onFormSubmit = async (
     values: Product,
     { setSubmitting }: FormikHelpers<Product>
@@ -40,7 +36,6 @@ function AddProductForm() {
     try {
       const payload: MSWResponseBody = await addProduct(values).unwrap();
       toast.success(payload.text);
-      navigate("/");
     } catch (error) {
       let errMsg = "An error occured ";
       if (error instanceof Error) {
@@ -53,7 +48,7 @@ function AddProductForm() {
   };
   return (
     <>
-      {isProductBeingAdded && <ProgressSpinner />}
+      {isProductBeingAdded && <Loading />}
       {!isProductBeingAdded && (
         <Formik
           initialValues={{

@@ -17,8 +17,9 @@ const StyledSearchBarContainer = styled.div`
 `;
 
 function SearchBar() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<keyof Product>("name");
+  const [selectedCategory, setSelectedCategory] = useState<keyof Product | "">(
+    ""
+  );
   const [filterText, setFilterText] = useState<string>("");
 
   const dispatch = useAppDispatch();
@@ -33,14 +34,16 @@ function SearchBar() {
   return (
     <StyledSearchBarContainer>
       <InputText
+        data-testid="search-input"
         value={filterText}
+        placeholder={`Search in ${selectedCategory}`}
         onChange={(e) => {
           setFilterText(e.target.value);
-
           debounceDispatch(e.target.value);
         }}
       />
       <Dropdown
+        data-testid="dropdown-category"
         value={selectedCategory}
         options={
           ["name", "brand", "image", "price", "id"] as Array<keyof Product>

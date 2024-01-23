@@ -24,13 +24,22 @@ const StyledHeaderContainer = styled.div`
   align-items: center;
 `;
 
-function Header() {
+type HeaderProps = {
+  title: string;
+  route?: string;
+  buttonText?: string;
+};
+
+function Header(props: HeaderProps) {
+  const { title, route, buttonText = "button" } = props;
   return (
     <StyledHeaderContainer>
-      <StyledHeader>Lior's Products App</StyledHeader>
-      <Link to={`/add`}>
-        <StyledAddProduct>Add</StyledAddProduct>
-      </Link>
+      <StyledHeader>{title}</StyledHeader>
+      {route && (
+        <Link to={route}>
+          <StyledAddProduct>{buttonText}</StyledAddProduct>
+        </Link>
+      )}
     </StyledHeaderContainer>
   );
 }
