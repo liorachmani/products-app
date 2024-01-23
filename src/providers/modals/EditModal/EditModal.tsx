@@ -14,9 +14,10 @@ import { GridOptions, ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import { isEqual } from "lodash";
+import { Loading } from "@src/components";
 
 type EditModalProps = Product & {
   open: boolean;
@@ -38,6 +39,12 @@ function EditModal(props: EditModalProps) {
   const [editedRowValues, setEditedRowValues] = useState<EditableFields>({
     ...canBeEdited,
   });
+
+  const isRowChanged = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { open, onClose, ...toBeCompared } = props;
+    return !isEqual(toBeCompared, editedRowValues);
+  }, [editedRowValues, props]);
 
   const gridOptions: GridOptions = {
     defaultColDef: { flex: 1 },
@@ -84,7 +91,7 @@ function EditModal(props: EditModalProps) {
         label="Save"
         severity="success"
         onClick={handleEditRowSave}
-        disabled={isProductBeingUpdated || !isValidRow}
+        disabled={!isRowChanged() || isProductBeingUpdated || !isValidRow}
         text
         raised
       />
@@ -145,9 +152,9 @@ function EditModal(props: EditModalProps) {
           style={{ width: "50rem" }}
           onHide={closeModal}
         >
-          {isProductBeingUpdated && <ProgressSpinner />}
+          {isProductBeingUpdated && <Loading />}
           {!isProductBeingUpdated && (
-            <div className="ag-theme-quartz" style={{ height: "100%" }}>
+            <div className="ag-theme-quartz">
               <AgGridReact
                 rowData={[{ ...editedRowValues }]}
                 columnDefs={columnDefs}
