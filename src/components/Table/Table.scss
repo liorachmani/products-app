@@ -1,0 +1,24 @@
+.rowActions {
+  display: none;
+}
+
+/* ag-grid adds ag-row-hover class on row hover */
+.ag-row-hover .rowActions {
+  display: flex;
+  width: 100%;
+}
+
+.ag-header-cell-label {
+  justify-content: center;
+}
+
+.ag-row .ag-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableActionsDropdown {
+  height: 60%;
+  align-items: center;
+}

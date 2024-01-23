@@ -13,12 +13,25 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
+      "@redux/*": ["src/redux/*"],
+      "@mocks/*": ["src/mocks/*"],
+      "@models/*": ["src/models/*"],
+      "@assets/*": ["src/assets/*"],
+      "@providers/*": ["src/providers/*"],
+      "@routes/*": ["src/routes/*"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
