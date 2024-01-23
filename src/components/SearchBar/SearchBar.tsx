@@ -16,11 +16,15 @@ const StyledSearchBarContainer = styled.div`
   margin: 1rem;
 `;
 
+export interface Search {
+  filterText: string;
+  category: keyof Product | "";
+}
+
 const SearchBar = () => {
-  const [selectedCategory, setSelectedCategory] = useState<keyof Product | "">(
-    ""
-  );
-  const [filterText, setFilterText] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] =
+    useState<Search["category"]>("name");
+  const [filterText, setFilterText] = useState<Search["filterText"]>("");
 
   const dispatch = useAppDispatch();
 

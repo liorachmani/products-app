@@ -10,14 +10,19 @@ import { ModalProvider } from "@src/providers";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AddProduct, ErrorPage } from "@src/routes";
 
+export enum ROUTES {
+  DEFAULT = "/",
+  ADD = "/add",
+}
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: ROUTES.DEFAULT,
     element: <App />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/add",
+    path: ROUTES.ADD,
     element: <AddProduct />,
   },
 ]);

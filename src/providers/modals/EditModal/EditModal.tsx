@@ -1,10 +1,4 @@
-import {
-  MSWResponseBody,
-  Product,
-  currentAvailableBrands,
-  currentAvailableImages,
-  productSchema,
-} from "@src/models";
+import { MSWResponseBody, Product } from "@src/models";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useModal } from "@src/providers";
@@ -18,6 +12,8 @@ import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { isEqual } from "lodash";
 import { Loading } from "@src/components";
+import { currentAvailableBrands, currentAvailableImages } from "@src/constants";
+import { productSchema } from "@src/schemas";
 
 interface Props extends Product {
   open: boolean;

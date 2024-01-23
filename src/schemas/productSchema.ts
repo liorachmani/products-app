@@ -1,5 +1,6 @@
 import { ObjectSchema, object, string, number } from "yup";
-import { Product, currentAvailableBrands, currentAvailableImages } from ".";
+import { Product } from "../models";
+import { currentAvailableBrands, currentAvailableImages } from "@src/constants";
 
 export const productSchema: ObjectSchema<Product> = object({
   name: string()
