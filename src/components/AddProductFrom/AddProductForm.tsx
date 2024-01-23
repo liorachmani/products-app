@@ -25,7 +25,7 @@ const FormFieldContainer = styled.div`
   margin: 1rem;
 `;
 
-function AddProductForm() {
+const AddProductForm = () => {
   const [addProduct, { isLoading: isProductBeingAdded }] =
     useAddNewProductMutation();
 
@@ -106,5 +106,5 @@ function AddProductForm() {
       )}
     </>
   );
-}
-export default AddProductForm;
+};
+export { AddProductForm };

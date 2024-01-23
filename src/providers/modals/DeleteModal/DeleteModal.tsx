@@ -1,4 +1,4 @@
-import { MSWResponseBody, TableRow } from "@src/models";
+import { MSWResponseBody } from "@src/models";
 import { GridOptions, ColDef } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
@@ -9,11 +9,11 @@ import { Dialog } from "primereact/dialog";
 import { Image } from "primereact/image";
 import { assetsPath } from "@src/constants";
 import { toast } from "react-toastify";
-import { Loading } from "@src/components";
+import { Loading, TableRow } from "@src/components";
 
-type DeleteModalProps = Omit<TableRow, "actions">;
+interface Props extends Omit<TableRow, "actions"> {}
 
-function DeleteModal(props: DeleteModalProps) {
+const DeleteModal = (props: Props) => {
   const [deleteProduct, { isLoading: isProductBeingDeleted }] =
     useDeleteProductMutation();
   const { closeModal } = useModal();
@@ -107,6 +107,6 @@ function DeleteModal(props: DeleteModalProps) {
       </div>
     </>
   );
-}
+};
 
-export default DeleteModal;
+export { DeleteModal };

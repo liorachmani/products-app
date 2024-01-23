@@ -10,7 +10,7 @@ const StyledHeader = styled.h1`
   background-clip: text;
 `;
 
-const StyledAddProduct = styled.button`
+const StyledHeaderButton = styled.button`
   text-align: center;
   margin: auto;
   background-color: #d76767;
@@ -24,24 +24,24 @@ const StyledHeaderContainer = styled.div`
   align-items: center;
 `;
 
-type HeaderProps = {
+interface Props {
   title: string;
   route?: string;
   buttonText?: string;
-};
+}
 
-function Header(props: HeaderProps) {
+const Header = (props: Props) => {
   const { title, route, buttonText = "button" } = props;
   return (
     <StyledHeaderContainer>
       <StyledHeader>{title}</StyledHeader>
       {route && (
         <Link to={route}>
-          <StyledAddProduct>{buttonText}</StyledAddProduct>
+          <StyledHeaderButton>{buttonText}</StyledHeaderButton>
         </Link>
       )}
     </StyledHeaderContainer>
   );
-}
+};
 
-export default Header;
+export { Header };

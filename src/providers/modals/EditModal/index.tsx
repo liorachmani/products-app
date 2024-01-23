@@ -1,1 +1,1 @@
-export { default as EditModal } from "./EditModal";
+export * from "./EditModal";

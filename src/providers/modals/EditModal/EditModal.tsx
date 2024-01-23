@@ -19,13 +19,14 @@ import { toast } from "react-toastify";
 import { isEqual } from "lodash";
 import { Loading } from "@src/components";
 
-type EditModalProps = Product & {
+interface Props extends Product {
   open: boolean;
   onClose: () => void;
-};
-type EditableFields = Product;
+}
 
-function EditModal(props: EditModalProps) {
+interface EditableFields extends Product {}
+
+const EditModal = (props: Props) => {
   const [editProduct, { isLoading: isProductBeingUpdated }] =
     useEditProductMutation();
 
@@ -166,6 +167,6 @@ function EditModal(props: EditModalProps) {
       </div>
     </>
   );
-}
+};
 
-export default EditModal;
+export { EditModal };

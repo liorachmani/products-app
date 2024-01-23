@@ -3,6 +3,5 @@ export * from "./Endpoints";
 export * from "./Operations";
 export * from "./RtkTags";
 export * from "./MSW";
-export * from "./Table";
 export * from "./Schemas";
 export * from "./Search";

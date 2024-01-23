@@ -16,7 +16,7 @@ const StyledSearchBarContainer = styled.div`
   margin: 1rem;
 `;
 
-function SearchBar() {
+const SearchBar = () => {
   const [selectedCategory, setSelectedCategory] = useState<keyof Product | "">(
     ""
   );
@@ -56,6 +56,6 @@ function SearchBar() {
       />
     </StyledSearchBarContainer>
   );
-}
+};
 
-export default SearchBar;
+export { SearchBar };

@@ -1,9 +1,11 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 
-type ErrorComponentProps = { error: FetchBaseQueryError | SerializedError };
+interface Props {
+  error: FetchBaseQueryError | SerializedError;
+}
 
-function ErrorComponent(props: ErrorComponentProps) {
+const ErrorComponent = (props: Props) => {
   const { error } = props;
   let errorMsg: string | undefined;
 
@@ -20,6 +22,6 @@ function ErrorComponent(props: ErrorComponentProps) {
       {errorMsg}
     </div>
   );
-}
+};
 
-export default ErrorComponent;
+export { ErrorComponent };

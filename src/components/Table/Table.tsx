@@ -15,16 +15,17 @@ import { assetsPath } from "@src/constants";
 import { RootState, useAppSelector } from "@src/redux";
 import styled from "styled-components";
 
-type TableRow = Omit<Product, "image"> & { image: JSX.Element } & {
+export interface TableRow extends Omit<Product, "image"> {
+  image: JSX.Element;
   actions: ReactNode;
-};
+}
 
 enum TABLE_ACTIONS {
   EDIT = "edit",
   DELETE = "delete",
 }
 
-function Table() {
+const Table = () => {
   const { category, filterText } = useAppSelector(
     (store: RootState) => store.search
   );
@@ -73,6 +74,16 @@ function Table() {
     domLayout: "autoHeight",
   };
 
+  const handleRowAction = (event: DropdownChangeEvent) => {
+    const {
+      target: { id, value },
+    } = event;
+
+    const currProductData = products.find((row) => row.id === id);
+
+    openModal(value, { ...currProductData });
+  };
+
   const rowsData: TableRow[] = products.map((product) => ({
     ...product,
     image: (
@@ -97,16 +108,6 @@ function Table() {
     ),
   }));
 
-  function handleRowAction(event: DropdownChangeEvent) {
-    const {
-      target: { id, value },
-    } = event;
-
-    const currProductData = products.find((row) => row.id === id);
-
-    openModal(value, { ...currProductData });
-  }
-
   const TableWrapper = styled.div.attrs((props) => ({
     className: props.className,
   }))`
@@ -125,6 +126,6 @@ function Table() {
       </TableWrapper>
     </>
   );
-}
+};
 
-export default Table;
+export { Table };

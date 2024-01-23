@@ -1,7 +1,7 @@
 import { ProgressSpinner } from "primereact/progressspinner";
 
-function Loading() {
+const Loading = () => {
   return <ProgressSpinner />;
-}
+};
 
-export default Loading;
+export { Loading };

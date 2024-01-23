@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Search } from "@src/models";
 
-type SearchState = Search;
+interface SearchState extends Search {}
 
 const initialState: SearchState = {
   category: "name",
