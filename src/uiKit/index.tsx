@@ -6,3 +6,4 @@ export * from "./ErrorComponent";
 export * from "./Loading";
 export * from "./Dialog";
 export * from "./Button";
+export * from "./Image";

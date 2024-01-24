@@ -4,17 +4,16 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { Product } from "@src/models";
 import { ReactNode } from "react";
 import "./ProductsTable.scss";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { Image } from "primereact/image";
+import { DropdownChangeEvent } from "primereact/dropdown";
 import { useGetAllProductsQuery } from "@src/redux/api";
 import { useModal } from "@src/providers";
 import { customCellRenderer, extractReduxHookErrorMessage } from "@src/utils";
 import { assetsPath } from "@src/constants";
 import { RootState, useAppSelector } from "@src/redux";
 import styled, { css } from "styled-components";
-import { Table, ErrorComponent, Loading } from "@src/uiKit";
+import { Table, ErrorComponent, Loading, Dropdown, Image } from "@src/uiKit";
 
-export interface TableRow extends Omit<Product, "image"> {
+export interface ProductsTableRow extends Omit<Product, "image"> {
   image: JSX.Element;
   actions: ReactNode;
 }
@@ -28,6 +27,30 @@ enum PRODUCTS_TABLE_ACTIONS {
   EDIT = "edit",
   DELETE = "delete",
 }
+
+const productTableColumns: ColDef<ProductsTableRow>[] = [
+  {
+    field: "name",
+  },
+  {
+    field: "brand",
+  },
+  {
+    field: "image",
+    cellRenderer: customCellRenderer,
+  },
+  {
+    field: "price",
+  },
+  {
+    field: "id",
+  },
+
+  {
+    field: "actions",
+    cellRenderer: customCellRenderer,
+  },
+];
 
 const TableWrapper = styled.div<TableWrapperProps>`
   &.ag-theme-quartz {
@@ -62,29 +85,6 @@ const ProductsTable = () => {
   }
   if (isFetching && products.length === 0) return <Loading />;
 
-  const productColumns: ColDef<TableRow>[] = [
-    {
-      field: "name",
-    },
-    {
-      field: "brand",
-    },
-    {
-      field: "image",
-      cellRenderer: customCellRenderer,
-    },
-    {
-      field: "price",
-    },
-    {
-      field: "id",
-    },
-    {
-      field: "actions",
-      cellRenderer: customCellRenderer,
-    },
-  ];
-
   const handleRowAction = (event: DropdownChangeEvent) => {
     const {
       target: { id, value },
@@ -95,7 +95,7 @@ const ProductsTable = () => {
     openModal(value, { ...currProductData });
   };
 
-  const rowsData: TableRow[] = products.map((product) => ({
+  const rowsData: ProductsTableRow[] = products.map((product) => ({
     ...product,
     image: (
       <Image
@@ -125,13 +125,7 @@ const ProductsTable = () => {
   return (
     <>
       <TableWrapper className="ag-theme-quartz" isLoading={isFetching}>
-        {/* <AgGridReact
-          rowData={rowsData}
-          columnDefs={productColumns}
-          gridOptions={gridOptions}
-        /> */}
-
-        <Table rowData={rowsData} columnDefs={productColumns} />
+        <Table rowData={rowsData} columnDefs={productTableColumns} />
       </TableWrapper>
     </>
   );

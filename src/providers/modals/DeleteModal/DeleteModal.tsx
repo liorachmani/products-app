@@ -1,15 +1,33 @@
 import { MSWResponseBody } from "@src/models";
-import { GridOptions, ColDef } from "ag-grid-community";
+import { ColDef } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
 import { customCellRenderer, extractErrorMessage } from "@src/utils";
-import { Image } from "primereact/image";
 import { assetsPath } from "@src/constants";
 import { toast } from "react-toastify";
-import { TableRow } from "@src/components";
-import { Loading, Dialog, Button, Table } from "@src/uiKit";
+import { ProductsTableRow } from "@src/components";
+import { Loading, Dialog, Button, Table, Image } from "@src/uiKit";
 
-interface Props extends Omit<TableRow, "actions"> {}
+interface Props extends Omit<ProductsTableRow, "actions"> {}
+
+const columnDefs: ColDef<ProductsTableRow>[] = [
+  {
+    field: "name",
+  },
+  {
+    field: "brand",
+  },
+  {
+    field: "image",
+    cellRenderer: customCellRenderer,
+  },
+  {
+    field: "price",
+  },
+  {
+    field: "id",
+  },
+];
 
 const DeleteModal = (props: Props) => {
   const [deleteProduct, { isLoading: isProductBeingDeleted }] =
@@ -44,35 +62,6 @@ const DeleteModal = (props: Props) => {
     </div>
   );
 
-  const columnDefs: ColDef<TableRow>[] = [
-    {
-      field: "name",
-      cellRenderer: undefined,
-    },
-    {
-      field: "brand",
-      cellRenderer: undefined,
-    },
-    {
-      field: "image",
-      cellRenderer: customCellRenderer,
-    },
-    {
-      field: "price",
-      cellRenderer: undefined,
-    },
-    {
-      field: "id",
-      cellRenderer: undefined,
-    },
-  ];
-
-  const gridOptions: GridOptions = {
-    defaultColDef: { flex: 1 },
-    rowHeight: 100,
-    domLayout: "autoHeight",
-  };
-
   const rows = [
     {
       ...props,
@@ -94,11 +83,7 @@ const DeleteModal = (props: Props) => {
           {isProductBeingDeleted && <Loading />}
           {!isProductBeingDeleted && (
             <div className="ag-theme-quartz">
-              <Table
-                rowData={rows}
-                columnDefs={columnDefs}
-                gridOptions={gridOptions}
-              />
+              <Table rowData={rows} columnDefs={columnDefs} />
             </div>
           )}
         </Dialog>

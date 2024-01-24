@@ -19,6 +19,38 @@ interface Props extends Product {
 
 interface EditableFields extends Product {}
 
+const columnDefs: ColDef<Product>[] = [
+  {
+    field: "name",
+    editable: true,
+  },
+  {
+    field: "brand",
+    editable: true,
+    cellEditor: "agSelectCellEditor",
+    cellEditorParams: {
+      values: currentAvailableBrands,
+    },
+  },
+  {
+    field: "image",
+    cellRenderer: customCellRenderer,
+    editable: true,
+    cellEditor: "agSelectCellEditor",
+    cellEditorParams: {
+      values: currentAvailableImages,
+    },
+  },
+  {
+    field: "price",
+    editable: true,
+  },
+  {
+    field: "id",
+    editable: true,
+  },
+];
+
 const EditModal = (props: Props) => {
   const [editProduct, { isLoading: isProductBeingUpdated }] =
     useEditProductMutation();
@@ -100,41 +132,6 @@ const EditModal = (props: Props) => {
       />
     </div>
   );
-  const columnDefs: ColDef<Product>[] = [
-    {
-      field: "name",
-      cellRenderer: undefined,
-      editable: true,
-    },
-    {
-      field: "brand",
-      cellRenderer: undefined,
-      editable: true,
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: {
-        values: currentAvailableBrands,
-      },
-    },
-    {
-      field: "image",
-      cellRenderer: customCellRenderer,
-      editable: true,
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: {
-        values: currentAvailableImages,
-      },
-    },
-    {
-      field: "price",
-      cellRenderer: undefined,
-      editable: true,
-    },
-    {
-      field: "id",
-      cellRenderer: undefined,
-      editable: true,
-    },
-  ];
 
   return (
     <>

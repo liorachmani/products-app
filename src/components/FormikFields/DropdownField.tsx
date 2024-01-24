@@ -1,5 +1,5 @@
 import { useField } from "formik";
-import { Dropdown } from "primereact/dropdown";
+import { Dropdown } from "@src/uiKit";
 import { FieldErrorMessage } from "./ErrorMessageField";
 
 interface Props {
