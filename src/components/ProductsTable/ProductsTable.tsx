@@ -1,10 +1,9 @@
-import { AgGridReact } from "ag-grid-react";
-import { GridOptions, ColDef } from "ag-grid-community";
+import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { Product } from "@src/models";
 import { ReactNode } from "react";
-import "./Table.scss";
+import "./ProductsTable.scss";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Image } from "primereact/image";
 import { useGetAllProductsQuery } from "@src/redux/api";
@@ -14,18 +13,19 @@ import { customCellRenderer } from "@src/utils";
 import { assetsPath } from "@src/constants";
 import { RootState, useAppSelector } from "@src/redux";
 import styled from "styled-components";
+import { Table } from "@src/uiKit";
 
 export interface TableRow extends Omit<Product, "image"> {
   image: JSX.Element;
   actions: ReactNode;
 }
 
-enum TABLE_ACTIONS {
+enum PRODUCTS_TABLE_ACTIONS {
   EDIT = "edit",
   DELETE = "delete",
 }
 
-const Table = () => {
+const ProductsTable = () => {
   const { category, filterText } = useAppSelector(
     (store: RootState) => store.search
   );
@@ -65,15 +65,6 @@ const Table = () => {
     },
   ];
 
-  const gridOptions: GridOptions = {
-    defaultColDef: { flex: 1 },
-    rowHeight: 100,
-    pagination: true,
-    paginationPageSize: 10,
-    paginationPageSizeSelector: [10, 20, 50, 100],
-    domLayout: "autoHeight",
-  };
-
   const handleRowAction = (event: DropdownChangeEvent) => {
     const {
       target: { id, value },
@@ -100,7 +91,10 @@ const Table = () => {
         id={product.id}
         onChange={handleRowAction}
         options={
-          [TABLE_ACTIONS.EDIT, TABLE_ACTIONS.DELETE] as Array<TABLE_ACTIONS>
+          [
+            PRODUCTS_TABLE_ACTIONS.EDIT,
+            PRODUCTS_TABLE_ACTIONS.DELETE,
+          ] as Array<PRODUCTS_TABLE_ACTIONS>
         }
         placeholder="Action"
         className={["rowActions", "tableActionsDropdown"].join(" ")}
@@ -118,14 +112,16 @@ const Table = () => {
   return (
     <>
       <TableWrapper className="ag-theme-quartz">
-        <AgGridReact
+        {/* <AgGridReact
           rowData={rowsData}
           columnDefs={productColumns}
           gridOptions={gridOptions}
-        />
+        /> */}
+
+        <Table rowData={rowsData} columnDefs={productColumns} />
       </TableWrapper>
     </>
   );
 };
 
-export { Table };
+export { ProductsTable };

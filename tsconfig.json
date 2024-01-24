@@ -32,7 +32,8 @@
       "@providers/*": ["src/providers/*"],
       "@routes/*": ["src/routes/*"],
       "@types/*": ["src/types/*"],
-      "@schemas/*": ["src/schemas/*"]
+      "@schemas/*": ["src/schemas/*"],
+      "@uiKit/*": ["src/uiKit/*"]
     }
   },
   "include": ["src"],

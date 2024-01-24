@@ -1,6 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import "./App.css";
-import { Header, Table, SearchBar } from "@src/components";
+import { Header, SearchBar, ProductsTable } from "@src/components";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
 
       <ToastContainer />
 
-      <Table />
+      <ProductsTable />
     </>
   );
 }
