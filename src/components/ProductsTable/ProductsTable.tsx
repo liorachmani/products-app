@@ -7,23 +7,39 @@ import "./ProductsTable.scss";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Image } from "primereact/image";
 import { useGetAllProductsQuery } from "@src/redux/api";
-import { ErrorComponent, Loading } from "@src/components";
 import { useModal } from "@src/providers";
-import { customCellRenderer } from "@src/utils";
+import { customCellRenderer, extractReduxHookErrorMessage } from "@src/utils";
 import { assetsPath } from "@src/constants";
 import { RootState, useAppSelector } from "@src/redux";
-import styled from "styled-components";
-import { Table } from "@src/uiKit";
+import styled, { css } from "styled-components";
+import { Table, ErrorComponent, Loading } from "@src/uiKit";
 
 export interface TableRow extends Omit<Product, "image"> {
   image: JSX.Element;
   actions: ReactNode;
 }
 
+interface TableWrapperProps {
+  className?: string;
+  isLoading?: boolean;
+}
+
 enum PRODUCTS_TABLE_ACTIONS {
   EDIT = "edit",
   DELETE = "delete",
 }
+
+const TableWrapper = styled.div<TableWrapperProps>`
+  &.ag-theme-quartz {
+    margin-top: 2vh;
+  }
+
+  ${(props) =>
+    props.isLoading &&
+    css`
+      opacity: 0.5;
+    `}
+`;
 
 const ProductsTable = () => {
   const { category, filterText } = useAppSelector(
@@ -39,7 +55,11 @@ const ProductsTable = () => {
 
   const { openModal } = useModal();
 
-  if (isError) return <ErrorComponent error={error} />;
+  if (isError) {
+    return (
+      <ErrorComponent errorMessage={extractReduxHookErrorMessage(error)} />
+    );
+  }
   if (isFetching && products.length === 0) return <Loading />;
 
   const productColumns: ColDef<TableRow>[] = [
@@ -102,16 +122,9 @@ const ProductsTable = () => {
     ),
   }));
 
-  const TableWrapper = styled.div.attrs((props) => ({
-    className: props.className,
-  }))`
-    margin-top: 2vh;
-    opacity: ${isFetching ? "0.5" : "1"};
-  `;
-
   return (
     <>
-      <TableWrapper className="ag-theme-quartz">
+      <TableWrapper className="ag-theme-quartz" isLoading={isFetching}>
         {/* <AgGridReact
           rowData={rowsData}
           columnDefs={productColumns}

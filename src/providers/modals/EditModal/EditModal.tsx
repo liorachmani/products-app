@@ -5,15 +5,12 @@ import { useModal } from "@src/providers";
 import { useEditProductMutation } from "@src/redux/api";
 import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { GridOptions, ColDef } from "ag-grid-community";
-import { AgGridReact } from "ag-grid-react";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { isEqual } from "lodash";
-import { Loading } from "@src/components";
 import { currentAvailableBrands, currentAvailableImages } from "@src/constants";
 import { productSchema } from "@src/schemas";
+import { Loading, Dialog, Button, Table } from "@src/uiKit";
 
 interface Props extends Product {
   open: boolean;
@@ -38,10 +35,8 @@ const EditModal = (props: Props) => {
   });
 
   const isRowChanged = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { open, onClose, ...toBeCompared } = props;
-    return !isEqual(toBeCompared, editedRowValues);
-  }, [editedRowValues, props]);
+    return !isEqual(canBeEdited, editedRowValues);
+  }, [canBeEdited, editedRowValues]);
 
   const gridOptions: GridOptions = {
     defaultColDef: { flex: 1 },
@@ -56,7 +51,10 @@ const EditModal = (props: Props) => {
         const parsedNewProduct = productSchema.validateSync(newRow);
 
         setIsValidRow(true);
-        setEditedRowValues({ ...parsedNewProduct });
+        setEditedRowValues((prev) => ({
+          ...prev,
+          [colId]: parsedNewProduct[colId],
+        }));
       } catch (error) {
         const errMsg = extractErrorMessage(error);
         toast.error(errMsg);
@@ -152,7 +150,7 @@ const EditModal = (props: Props) => {
           {isProductBeingUpdated && <Loading />}
           {!isProductBeingUpdated && (
             <div className="ag-theme-quartz">
-              <AgGridReact
+              <Table
                 rowData={[{ ...editedRowValues }]}
                 columnDefs={columnDefs}
                 gridOptions={gridOptions}

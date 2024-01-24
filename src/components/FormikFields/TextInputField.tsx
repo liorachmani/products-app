@@ -1,5 +1,5 @@
 import { useField } from "formik";
-import { InputText } from "primereact/inputtext";
+import { InputText } from "@src/uiKit";
 import { FieldErrorMessage } from "./ErrorMessageField";
 
 interface Props {

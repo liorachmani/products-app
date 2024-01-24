@@ -9,6 +9,7 @@ type ErrorTypes = unknown | Error | ValidationError;
  */
 export const extractErrorMessage = (errorObj: ErrorTypes) => {
   let errMsg = "An error occured ";
+
   if (errorObj instanceof Error || errorObj instanceof ValidationError) {
     errMsg += errorObj.message;
   }

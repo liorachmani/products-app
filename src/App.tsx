@@ -1,13 +1,13 @@
 import { ToastContainer } from "react-toastify";
 import "./App.css";
-import { Header, SearchBar, ProductsTable } from "@src/components";
+import { Header, ProductsSearchBar, ProductsTable } from "@src/components";
 
 function App() {
   return (
     <>
       <Header title="Lior's Products App" route="/add" buttonText="Add" />
 
-      <SearchBar />
+      <ProductsSearchBar />
 
       <ToastContainer />
 

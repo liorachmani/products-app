@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { DropdownField, Loading, TextInputField } from "@src/components";
+import { DropdownField, TextInputField } from "@src/components";
 import { MSWResponseBody, Product } from "@src/models";
 import { useAddNewProductMutation } from "@src/redux/api";
 import { Form, Formik, FormikHelpers } from "formik";
-import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { extractErrorMessage } from "@src/utils";
 import { currentAvailableBrands, currentAvailableImages } from "@src/constants";
 import { productSchema } from "@src/schemas";
+import { Loading, Button } from "@src/uiKit";
 
 const StyledForm = styled(Form)`
   display: flex;
