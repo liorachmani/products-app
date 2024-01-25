@@ -1,15 +1,16 @@
 import { DefaultBodyType, delay, http, HttpResponse, PathParams } from "msw";
-import {
-  ENDPOINTS,
-  OPERATIONS,
-  Product,
-  MSWResponseBody,
-  GetProductsParams,
-} from "@src/models";
+import { Product, MSWResponseBody } from "@src/models";
 import { productsData } from "@mocks/data";
+import { OPERATIONS } from "@src/types";
+import { API_PREFIX, PRODUCS_PREFIX } from "@src/redux/api";
+import { Search } from "@src/components";
+
+export enum ENDPOINTS {
+  PRODUCTS = `${API_PREFIX}${PRODUCS_PREFIX}`,
+}
 
 export const handlers = [
-  http.get<Required<GetProductsParams>, DefaultBodyType, Product[]>(
+  http.get<Search, DefaultBodyType, Product[]>(
     ENDPOINTS.PRODUCTS,
     async ({ request }) => {
       await delay(1000);

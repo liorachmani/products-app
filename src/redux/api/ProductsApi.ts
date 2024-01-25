@@ -1,16 +1,13 @@
-import {
-  GetProductsParams,
-  MSWResponseBody,
-  OPERATIONS,
-  PRODUCS_PREFIX,
-  Product,
-} from "@src/models";
-import { baseApi } from "@redux/api";
-import { RTK_TAGS } from "@src/models";
+import { MSWResponseBody, Product } from "@src/models";
+import { RTK_TAGS, baseApi } from "@redux/api";
+import { OPERATIONS } from "@src/types";
+import { ProductsSearch } from "@src/components";
+
+export const PRODUCS_PREFIX = "/products";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllProducts: builder.query<Product[], GetProductsParams>({
+    getAllProducts: builder.query<Product[], ProductsSearch>({
       query: (filterParams) => {
         const { category = "", filterText = "" } = filterParams;
         return {

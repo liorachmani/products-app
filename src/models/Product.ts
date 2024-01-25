@@ -1,21 +1,9 @@
-export type Product = {
+type Brand = "Nike" | "Adidas" | "Under Armour" | "Puma";
+
+export interface Product {
   name: string;
-  brand: "Nike" | "Adidas" | "Under Armour" | "Puma";
+  brand: Brand;
   image: string;
   price: number;
   id: string;
-};
-
-export const currentAvailableImages = [
-  "shirt",
-  "pants",
-  "socks",
-  "shoes",
-  "ball",
-];
-export const currentAvailableBrands: Array<Product["brand"]> = [
-  "Nike",
-  "Adidas",
-  "Under Armour",
-  "Puma",
-];
+}

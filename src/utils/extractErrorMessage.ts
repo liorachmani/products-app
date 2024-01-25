@@ -7,11 +7,12 @@ type ErrorTypes = unknown | Error | ValidationError;
  * @param errorObj the error object received
  * @returns the actual error message
  */
-export function extractErrorMessage(errorObj: ErrorTypes) {
+export const extractErrorMessage = (errorObj: ErrorTypes) => {
   let errMsg = "An error occured ";
+
   if (errorObj instanceof Error || errorObj instanceof ValidationError) {
     errMsg += errorObj.message;
   }
 
   return errMsg;
-}
+};

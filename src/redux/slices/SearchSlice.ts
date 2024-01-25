@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Search } from "@src/models";
+import { ProductsSearch } from "@src/components";
 
-type SearchState = Search;
+interface SearchState extends ProductsSearch {}
 
 const initialState: SearchState = {
   category: "name",
@@ -17,7 +17,7 @@ export const searchSlice = createSlice({
       state.filterText = action.payload;
     },
 
-    editCategory(state, action: PayloadAction<Search["category"]>) {
+    editCategory(state, action: PayloadAction<ProductsSearch["category"]>) {
       state.category = action.payload;
     },
   },

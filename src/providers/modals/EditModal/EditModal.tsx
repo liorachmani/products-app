@@ -1,31 +1,57 @@
-import {
-  MSWResponseBody,
-  Product,
-  currentAvailableBrands,
-  currentAvailableImages,
-  productSchema,
-} from "@src/models";
+import { MSWResponseBody, Product } from "@src/models";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useModal } from "@src/providers";
 import { useEditProductMutation } from "@src/redux/api";
 import { customCellRenderer, extractErrorMessage } from "@src/utils";
 import { GridOptions, ColDef } from "ag-grid-community";
-import { AgGridReact } from "ag-grid-react";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { isEqual } from "lodash";
-import { Loading } from "@src/components";
+import { currentAvailableBrands, currentAvailableImages } from "@src/constants";
+import { productSchema } from "@src/schemas";
+import { Loading, Dialog, Button, Table } from "@src/uiKit";
 
-type EditModalProps = Product & {
+interface Props extends Product {
   open: boolean;
   onClose: () => void;
-};
-type EditableFields = Product;
+}
 
-function EditModal(props: EditModalProps) {
+interface EditableFields extends Product {}
+
+const columnDefs: ColDef<Product>[] = [
+  {
+    field: "name",
+    editable: true,
+  },
+  {
+    field: "brand",
+    editable: true,
+    cellEditor: "agSelectCellEditor",
+    cellEditorParams: {
+      values: currentAvailableBrands,
+    },
+  },
+  {
+    field: "image",
+    cellRenderer: customCellRenderer,
+    editable: true,
+    cellEditor: "agSelectCellEditor",
+    cellEditorParams: {
+      values: currentAvailableImages,
+    },
+  },
+  {
+    field: "price",
+    editable: true,
+  },
+  {
+    field: "id",
+    editable: true,
+  },
+];
+
+const EditModal = (props: Props) => {
   const [editProduct, { isLoading: isProductBeingUpdated }] =
     useEditProductMutation();
 
@@ -41,10 +67,8 @@ function EditModal(props: EditModalProps) {
   });
 
   const isRowChanged = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { open, onClose, ...toBeCompared } = props;
-    return !isEqual(toBeCompared, editedRowValues);
-  }, [editedRowValues, props]);
+    return !isEqual(canBeEdited, editedRowValues);
+  }, [canBeEdited, editedRowValues]);
 
   const gridOptions: GridOptions = {
     defaultColDef: { flex: 1 },
@@ -59,7 +83,10 @@ function EditModal(props: EditModalProps) {
         const parsedNewProduct = productSchema.validateSync(newRow);
 
         setIsValidRow(true);
-        setEditedRowValues({ ...parsedNewProduct });
+        setEditedRowValues((prev) => ({
+          ...prev,
+          [colId]: parsedNewProduct[colId],
+        }));
       } catch (error) {
         const errMsg = extractErrorMessage(error);
         toast.error(errMsg);
@@ -105,41 +132,6 @@ function EditModal(props: EditModalProps) {
       />
     </div>
   );
-  const columnDefs: ColDef<Product>[] = [
-    {
-      field: "name",
-      cellRenderer: undefined,
-      editable: true,
-    },
-    {
-      field: "brand",
-      cellRenderer: undefined,
-      editable: true,
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: {
-        values: currentAvailableBrands,
-      },
-    },
-    {
-      field: "image",
-      cellRenderer: customCellRenderer,
-      editable: true,
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: {
-        values: currentAvailableImages,
-      },
-    },
-    {
-      field: "price",
-      cellRenderer: undefined,
-      editable: true,
-    },
-    {
-      field: "id",
-      cellRenderer: undefined,
-      editable: true,
-    },
-  ];
 
   return (
     <>
@@ -155,7 +147,7 @@ function EditModal(props: EditModalProps) {
           {isProductBeingUpdated && <Loading />}
           {!isProductBeingUpdated && (
             <div className="ag-theme-quartz">
-              <AgGridReact
+              <Table
                 rowData={[{ ...editedRowValues }]}
                 columnDefs={columnDefs}
                 gridOptions={gridOptions}
@@ -166,6 +158,6 @@ function EditModal(props: EditModalProps) {
       </div>
     </>
   );
-}
+};
 
-export default EditModal;
+export { EditModal };
