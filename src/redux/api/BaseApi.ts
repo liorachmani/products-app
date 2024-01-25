@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_PREFIX } from "@src/models";
-import { RTK_TAGS } from "@src/models";
+
+export const API_PREFIX = "/api";
+
+export enum RTK_TAGS {
+  PRODUCT_TAG = "Product",
+}
 
 export const baseApi = createApi({
   reducerPath: "baseApi",

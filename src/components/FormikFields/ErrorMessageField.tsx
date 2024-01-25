@@ -5,4 +5,4 @@ const FieldErrorMessage = styled.div`
   color: red;
 `;
 
-export default FieldErrorMessage;
+export { FieldErrorMessage };

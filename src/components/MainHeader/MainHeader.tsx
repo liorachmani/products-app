@@ -1,7 +1,8 @@
+import { Header } from "@src/uiKit";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const StyledHeader = styled.h1`
+const StyledHeader = styled(Header)`
   text-align: center;
   margin: auto;
   font-weight: 600;
@@ -10,7 +11,7 @@ const StyledHeader = styled.h1`
   background-clip: text;
 `;
 
-const StyledAddProduct = styled.button`
+const StyledHeaderButton = styled.button`
   text-align: center;
   margin: auto;
   background-color: #d76767;
@@ -24,24 +25,24 @@ const StyledHeaderContainer = styled.div`
   align-items: center;
 `;
 
-type HeaderProps = {
+interface Props {
   title: string;
-  route?: string;
-  buttonText?: string;
-};
+  link?: string;
+  linkText?: string;
+}
 
-function Header(props: HeaderProps) {
-  const { title, route, buttonText = "button" } = props;
+const MainHeader = (props: Props) => {
+  const { title, link, linkText = "link" } = props;
   return (
     <StyledHeaderContainer>
       <StyledHeader>{title}</StyledHeader>
-      {route && (
-        <Link to={route}>
-          <StyledAddProduct>{buttonText}</StyledAddProduct>
+      {link && (
+        <Link to={link}>
+          <StyledHeaderButton>{linkText}</StyledHeaderButton>
         </Link>
       )}
     </StyledHeaderContainer>
   );
-}
+};
 
-export default Header;
+export { MainHeader };

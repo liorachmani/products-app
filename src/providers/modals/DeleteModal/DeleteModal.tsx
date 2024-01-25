@@ -1,19 +1,41 @@
-import { MSWResponseBody, TableRow } from "@src/models";
-import { GridOptions, ColDef } from "ag-grid-community";
+import { MSWResponseBody } from "@src/models";
+import { ColDef, GridOptions } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
 import { customCellRenderer, extractErrorMessage } from "@src/utils";
-import { AgGridReact } from "ag-grid-react";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { Image } from "primereact/image";
 import { assetsPath } from "@src/constants";
 import { toast } from "react-toastify";
-import { Loading } from "@src/components";
+import { ProductsTableRow } from "@src/components";
+import { Loading, Dialog, Button, Table, Image } from "@src/uiKit";
 
-type DeleteModalProps = Omit<TableRow, "actions">;
+interface Props extends Omit<ProductsTableRow, "actions"> {}
 
-function DeleteModal(props: DeleteModalProps) {
+const columnDefs: ColDef<ProductsTableRow>[] = [
+  {
+    field: "name",
+  },
+  {
+    field: "brand",
+  },
+  {
+    field: "image",
+    cellRenderer: customCellRenderer,
+  },
+  {
+    field: "price",
+  },
+  {
+    field: "id",
+  },
+];
+
+const gridOptions: GridOptions = {
+  defaultColDef: { flex: 1 },
+  rowHeight: 100,
+  domLayout: "autoHeight",
+};
+
+const DeleteModal = (props: Props) => {
   const [deleteProduct, { isLoading: isProductBeingDeleted }] =
     useDeleteProductMutation();
   const { closeModal } = useModal();
@@ -46,35 +68,6 @@ function DeleteModal(props: DeleteModalProps) {
     </div>
   );
 
-  const columnDefs: ColDef<TableRow>[] = [
-    {
-      field: "name",
-      cellRenderer: undefined,
-    },
-    {
-      field: "brand",
-      cellRenderer: undefined,
-    },
-    {
-      field: "image",
-      cellRenderer: customCellRenderer,
-    },
-    {
-      field: "price",
-      cellRenderer: undefined,
-    },
-    {
-      field: "id",
-      cellRenderer: undefined,
-    },
-  ];
-
-  const gridOptions: GridOptions = {
-    defaultColDef: { flex: 1 },
-    rowHeight: 100,
-    domLayout: "autoHeight",
-  };
-
   const rows = [
     {
       ...props,
@@ -96,7 +89,7 @@ function DeleteModal(props: DeleteModalProps) {
           {isProductBeingDeleted && <Loading />}
           {!isProductBeingDeleted && (
             <div className="ag-theme-quartz">
-              <AgGridReact
+              <Table
                 rowData={rows}
                 columnDefs={columnDefs}
                 gridOptions={gridOptions}
@@ -107,6 +100,6 @@ function DeleteModal(props: DeleteModalProps) {
       </div>
     </>
   );
-}
+};
 
-export default DeleteModal;
+export { DeleteModal };

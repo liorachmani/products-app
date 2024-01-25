@@ -1,10 +1,8 @@
 import { Product } from "@src/models";
 import { useAppDispatch } from "@src/redux";
 import { editCategory, editFilterText } from "@src/redux/slices";
-import { debounce } from "@src/utils";
-import { Dropdown } from "primereact/dropdown";
-import { InputText } from "primereact/inputtext";
-import { useCallback, useState } from "react";
+import { Dropdown, SearchBar } from "@src/uiKit";
+import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 
 const StyledSearchBarContainer = styled.div`
@@ -14,32 +12,42 @@ const StyledSearchBarContainer = styled.div`
   align-items: center;
   width: 70%;
   margin: 1rem;
+  justify-content: center;
 `;
 
-function SearchBar() {
-  const [selectedCategory, setSelectedCategory] = useState<keyof Product | "">(
-    ""
-  );
-  const [filterText, setFilterText] = useState<string>("");
+export interface ProductsSearch {
+  filterText: string;
+  category: keyof Product | "";
+}
+
+const ProductsSearchBar = () => {
+  const [selectedCategory, setSelectedCategory] =
+    useState<ProductsSearch["category"]>("name");
+  const [filterText, setFilterText] =
+    useState<ProductsSearch["filterText"]>("");
 
   const dispatch = useAppDispatch();
 
-  // Debounce function to delay dispatching the action for each character typed
-  const debounceDispatch = useCallback(
-    debounce((newFilterValue: string) => {
-      dispatch(editFilterText(newFilterValue));
-    }, 500),
-    [dispatch]
-  );
+  const handleSearchBarChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFilterText(event.target.value);
+  };
+
+  const handleSearchBarDebouncedChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(editFilterText(event.target.value));
+  };
+
   return (
     <StyledSearchBarContainer>
-      <InputText
+      <SearchBar
         data-testid="search-input"
         value={filterText}
         placeholder={`Search in ${selectedCategory}`}
-        onChange={(e) => {
-          setFilterText(e.target.value);
-          debounceDispatch(e.target.value);
+        onChange={handleSearchBarChange}
+        debounced={{
+          onChangeDebounced: handleSearchBarDebouncedChange,
+          onChangeWait: 500,
         }}
       />
       <Dropdown
@@ -56,6 +64,6 @@ function SearchBar() {
       />
     </StyledSearchBarContainer>
   );
-}
+};
 
-export default SearchBar;
+export { ProductsSearchBar };

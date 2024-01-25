@@ -1,17 +1,13 @@
 import styled from "styled-components";
-import { DropdownField, Loading, TextInputField } from "@src/components";
-import {
-  MSWResponseBody,
-  Product,
-  currentAvailableBrands,
-  currentAvailableImages,
-  productSchema,
-} from "@src/models";
+import { DropdownField, TextInputField } from "@src/components";
+import { MSWResponseBody, Product } from "@src/models";
 import { useAddNewProductMutation } from "@src/redux/api";
 import { Form, Formik, FormikHelpers } from "formik";
-import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { extractErrorMessage } from "@src/utils";
+import { currentAvailableBrands, currentAvailableImages } from "@src/constants";
+import { productSchema } from "@src/schemas";
+import { Loading, Button } from "@src/uiKit";
 
 const StyledForm = styled(Form)`
   display: flex;
@@ -25,7 +21,15 @@ const FormFieldContainer = styled.div`
   margin: 1rem;
 `;
 
-function AddProductForm() {
+const formInitialValues = {
+  name: "",
+  brand: "" as Product["brand"],
+  image: "",
+  price: 0,
+  id: "",
+};
+
+const AddProductForm = () => {
   const [addProduct, { isLoading: isProductBeingAdded }] =
     useAddNewProductMutation();
 
@@ -48,13 +52,7 @@ function AddProductForm() {
       {isProductBeingAdded && <Loading />}
       {!isProductBeingAdded && (
         <Formik
-          initialValues={{
-            name: "",
-            brand: "" as Product["brand"],
-            image: "",
-            price: 0,
-            id: "",
-          }}
+          initialValues={formInitialValues}
           validationSchema={productSchema}
           onSubmit={onFormSubmit}
         >
@@ -106,5 +104,5 @@ function AddProductForm() {
       )}
     </>
   );
-}
-export default AddProductForm;
+};
+export { AddProductForm };

@@ -30,7 +30,10 @@
       "@models/*": ["src/models/*"],
       "@assets/*": ["src/assets/*"],
       "@providers/*": ["src/providers/*"],
-      "@routes/*": ["src/routes/*"]
+      "@routes/*": ["src/routes/*"],
+      "@types/*": ["src/types/*"],
+      "@schemas/*": ["src/schemas/*"],
+      "@uiKit/*": ["src/uiKit/*"]
     }
   },
   "include": ["src"],
