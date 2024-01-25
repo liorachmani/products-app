@@ -12,6 +12,7 @@ const StyledSearchBarContainer = styled.div`
   align-items: center;
   width: 70%;
   margin: 1rem;
+  justify-content: center;
 `;
 
 export interface ProductsSearch {

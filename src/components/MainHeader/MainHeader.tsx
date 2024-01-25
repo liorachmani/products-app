@@ -1,7 +1,8 @@
+import { Header } from "@src/uiKit";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const StyledHeader = styled.h1`
+const StyledHeader = styled(Header)`
   text-align: center;
   margin: auto;
   font-weight: 600;
@@ -26,22 +27,22 @@ const StyledHeaderContainer = styled.div`
 
 interface Props {
   title: string;
-  route?: string;
-  buttonText?: string;
+  link?: string;
+  linkText?: string;
 }
 
-const Header = (props: Props) => {
-  const { title, route, buttonText = "button" } = props;
+const MainHeader = (props: Props) => {
+  const { title, link, linkText = "link" } = props;
   return (
     <StyledHeaderContainer>
       <StyledHeader>{title}</StyledHeader>
-      {route && (
-        <Link to={route}>
-          <StyledHeaderButton>{buttonText}</StyledHeaderButton>
+      {link && (
+        <Link to={link}>
+          <StyledHeaderButton>{linkText}</StyledHeaderButton>
         </Link>
       )}
     </StyledHeaderContainer>
   );
 };
 
-export { Header };
+export { MainHeader };

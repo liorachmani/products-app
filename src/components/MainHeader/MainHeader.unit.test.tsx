@@ -1,12 +1,11 @@
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom"; // Use MemoryRouter to wrap the component with a Router
-
-import Header from "./Header";
+import { MainHeader } from "./MainHeader";
 
 test("renders Header component", () => {
   const { getByText } = render(
     <MemoryRouter>
-      <Header title="Lior's Products App" route="add" buttonText="Add" />
+      <MainHeader title="Lior's Products App" link="add" linkText="Add" />
     </MemoryRouter>
   );
 
