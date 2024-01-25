@@ -1,5 +1,5 @@
 import { MSWResponseBody } from "@src/models";
-import { ColDef } from "ag-grid-community";
+import { ColDef, GridOptions } from "ag-grid-community";
 import { useModal } from "@src/providers";
 import { useDeleteProductMutation } from "@src/redux/api";
 import { customCellRenderer, extractErrorMessage } from "@src/utils";
@@ -28,6 +28,12 @@ const columnDefs: ColDef<ProductsTableRow>[] = [
     field: "id",
   },
 ];
+
+const gridOptions: GridOptions = {
+  defaultColDef: { flex: 1 },
+  rowHeight: 100,
+  domLayout: "autoHeight",
+};
 
 const DeleteModal = (props: Props) => {
   const [deleteProduct, { isLoading: isProductBeingDeleted }] =
@@ -83,7 +89,11 @@ const DeleteModal = (props: Props) => {
           {isProductBeingDeleted && <Loading />}
           {!isProductBeingDeleted && (
             <div className="ag-theme-quartz">
-              <Table rowData={rows} columnDefs={columnDefs} />
+              <Table
+                rowData={rows}
+                columnDefs={columnDefs}
+                gridOptions={gridOptions}
+              />
             </div>
           )}
         </Dialog>
